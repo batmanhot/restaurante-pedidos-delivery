@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- DATOS GENERALES ---
     const appDatos = {
-        nombre: 'PBO DIGITAL',
+        nombre: 'DOÑA NELLA',
         logo: './images/hamburguesa-logo.png', // Asegúrate de que esta imagen exista en tu carpeta /images
         direccion: 'Av. Las Flores 123, Lima, Perú',
         slogan: '¡La mejores hamburguesas de Lima!',
@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const infoWhatsapp = appDatos.whatsapp
             const infoEmail = appDatos.email
 
-            console.log(infoImagen, infoEmpresa, infoSlogan, infoDireccion, infoWhatsapp, infoEmail);
+            // console.log(infoImagen, infoEmpresa, infoSlogan, infoDireccion, infoWhatsapp, infoEmail);
 
             const logo = document.getElementById('caption-logo');
             logo.src = infoImagen; // Asignar la imagen del logo
@@ -141,7 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
          viewProductDetails(productId) 
          
-         console.log(viewProducts)     
+        //  console.log(viewProducts)     
      }
 
      function viewProductDetails(productId) {
@@ -322,6 +322,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                     <div class="flex items-center">
                         <p class="mx-2 font-bold">${item.quantity}x</p>
+                        <button class="remove-item-btn bg-red-600 text-white px-2 py-1 rounded-md hover:bg-red-700" data-id="${item.id}">
+                        <i class="fa fa-trash"></i>
                     </div>
                 `;
                 cartItemsContainer.appendChild(itemElement);
@@ -330,7 +332,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Actualizar total
         const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-        cartTotalSpan.textContent = `S/. ${total.toFixed(2).replace('.', ',')}`;
+        cartTotalSpan.textContent = `S/. ${total.toFixed(2).replace('.', ',')}`;        
+
+        // Añadir event listeners a los botones de eliminar - eliminar item del carrito
+        document.querySelectorAll('.remove-item-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                const id = parseInt(button.getAttribute('data-id'));
+                cart = cart.filter(item => item.id !== id);
+                showToast('Item eliminado del carrito');
+                updateCart();
+            });
+        });
     }
 
 
