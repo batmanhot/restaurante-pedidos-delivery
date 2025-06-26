@@ -1,0 +1,44 @@
+/* Contenedor del spinner */
+#spinner-container {
+  position: fixed; /* Lo fija en la ventana */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Fondo semitransparente oscuro */
+  display: flex; /* Para centrar el spinner */
+  justify-content: center;
+  align-items: center;
+  z-index: 9999; /* Asegura que esté encima de todo */
+  transition: opacity 0.3s ease-in-out; /* Transición suave para mostrar/ocultar */
+}
+
+/* Estado oculto del spinner */
+.spinner-hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none; /* Permite hacer clic a través cuando está oculto */
+}
+
+/* Estado visible del spinner */
+.spinner-visible {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+/* Estilo del spinner en sí */
+.spinner {
+  border: 8px solid rgba(255, 255, 255, 0.3); /* Base del círculo */
+  border-top: 8px solid #007bff; /* Color de la parte giratoria */
+  border-radius: 50%; /* Hace que sea un círculo */
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite; /* Aplica la animación */
+}
+
+/* Animación de giro */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

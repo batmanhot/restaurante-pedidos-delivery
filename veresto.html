@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Red Burguer - Menú Online</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" xintegrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- Google Fonts: Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Custom Styles */
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Custom scrollbar for cart modal */
+        #cart-items::-webkit-scrollbar {
+            width: 8px;
+        }
+        #cart-items::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        #cart-items::-webkit-scrollbar-thumb {
+            background: #d1d5db; /* gray-300 */
+            border-radius: 4px;
+        }
+        #cart-items::-webkit-scrollbar-thumb:hover {
+            background: #9ca3af; /* gray-400 */
+        }
+        
+        /* Animation for Toast */
+        .toast-enter {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        .toast-enter-active {
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 300ms, transform 300ms;
+        }
+        .toast-exit-active {
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 300ms, transform 300ms;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <!-- HERO / HEADER SECTION -->
+    <header class="relative h-96 md:h-[450px] bg-cover bg-center shadow-lg" style="background-image: url('https://images.unsplash.com/photo-1561758033-d89a9ad46330?q=80&w=2940&auto=format&fit=crop');">
+        <div class="absolute inset-0 bg-black/60"></div>
+        <div class="relative z-10 flex flex-col items-center justify-center h-full text-white text-center p-4">
+            <img src="https://assets.stickpng.com/images/580b57fcd9996e24bc43c1a8.png" alt="Logo de Red Burguer" class="w-28 h-28 md:w-36 md:h-36 object-contain drop-shadow-lg">
+            <h1 class="text-4xl md:text-6xl font-bold mt-2 drop-shadow-md">Red Burguer</h1>
+            <p class="mt-2 text-md md:text-lg">Rua dev sucesso, 12, Campo Grande, MS</p>
+            <div class="mt-4 bg-green-600 text-white font-semibold py-2 px-5 rounded-full text-sm shadow-md">
+                <i class="fa-regular fa-clock mr-2"></i>
+                <span>Seg a Dom - 18:00 às 22:00</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- MENU SECTION -->
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <h2 class="text-3xl font-bold text-center text-gray-900 mb-10">Conozca nuestro menú</h2>
+        
+        <div id="menu-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-6 gap-y-10">
+            <!-- Los productos se cargarán aquí con JavaScript -->
+        </div>
+
+        <!-- PAGINATION CONTROLS -->
+        <div id="pagination-controls" class="flex justify-center items-center mt-12 space-x-2">
+            <!-- Los botones se generarán aquí -->
+        </div>
+    </main>
+
+    <!-- FLOATING CART BUTTON / FOOTER -->
+    <footer id="cart-bar" class="fixed bottom-0 left-0 right-0 bg-red-600 text-white p-4 text-center cursor-pointer shadow-t-lg transition-transform duration-300 transform translate-y-full">
+        <div class="container mx-auto flex justify-center items-center font-semibold">
+            <i class="fa fa-shopping-cart text-xl mr-3"></i>
+            <span id="cart-status">(0) Ver mi carrito</span>
+        </div>
+    </footer>
+
+    <!-- CART MODAL -->
+    <div id="cart-modal" class="fixed inset-0 bg-black/70 z-50 hidden items-center justify-center p-4">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-md max-h-[90vh] flex flex-col">
+            <!-- Modal Header -->
+            <div class="flex justify-between items-center p-4 border-b">
+                <h3 class="text-2xl font-bold text-gray-900">Mi Carrito</h3>
+                <button id="close-modal-btn" class="text-gray-400 hover:text-red-500 text-3xl transition-colors">&times;</button>
+            </div>
+            
+            <!-- Cart Items -->
+            <div id="cart-items" class="p-4 flex-grow overflow-y-auto">
+                <!-- Los items se agregarán aquí -->
+            </div>
+            
+            <!-- Modal Footer -->
+            <div class="p-4 border-t bg-gray-50 rounded-b-lg">
+                <div class="flex justify-between items-center mb-4">
+                    <span class="text-lg font-semibold text-gray-800">Total:</span>
+                    <span id="cart-total" class="text-xl font-bold text-green-600">S/ 0.00</span>
+                </div>
+
+                <div class="space-y-3 mb-4">
+                     <input type="text" id="user-name" placeholder="Escribe tu nombre completo" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 transition">
+                    <input type="text" id="user-address" placeholder="Escribe tu dirección de entrega" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 transition">
+                </div>
+                
+                <button id="checkout-btn" class="w-full bg-green-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-green-700 transition-colors duration-300 flex items-center justify-center text-lg disabled:bg-gray-400">
+                    <i class="fab fa-whatsapp mr-3 text-xl"></i>
+                    Finalizar Pedido
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION -->
+    <div id="toast" class="fixed top-5 right-5 bg-green-500 text-white py-2 px-5 rounded-lg shadow-lg hidden items-center transition-all duration-300">
+        <i class="fa-solid fa-check-circle mr-2"></i>
+        <p id="toast-message">Item añadido al carrito!</p>
+    </div>
+
+
+    <script>
+        // --- Self-Executing Anonymous Function to avoid global scope pollution ---
+        (() => {
+            // --- CONFIGURATION ---
+            // ¡IMPORTANTE! Reemplaza este número con el tuyo.
+            // Formato: Código de país + número (sin el '+'). Ejemplo para Perú: 51987654321
+            const WHATSAPP_NUMBER = "51987654321"; 
+            const ITEMS_PER_PAGE = 8; // Productos por página
+
+            // --- PRODUCT DATABASE ---
+            // Aquí puedes editar, añadir o eliminar tus productos.
+            // Usa imágenes de buena calidad. Las URLs actuales son de ejemplo.
+            const menuItems = [
+                { id: 1, name: 'Cheese Burger Duplo', price: 35.00, image: 'https://images.unsplash.com/photo-1571091718767-18b5b1457add?q=80&w=2942&auto=format&fit=crop', description: 'Pão de fermentação natural, 2x burger 160g, queijo prato e maionese da casa.' },
+                { id: 2, name: 'Smash Burger', price: 30.00, image: 'https://images.unsplash.com/photo-1603614584226-d667c2f0b584?q=80&w=2835&auto=format&fit=crop', description: 'Pão brioche, burger 100g prensado, queijo cheddar e molho especial.' },
+                { id: 3, name: 'Cheese Bacon', price: 38.00, image: 'https://images.unsplash.com/photo-1551782450-a2132b4ba21d?q=80&w=2864&auto=format&fit=crop', description: 'Pão levinho, burger 160g, queijo prato, bacon crocante e maionese da casa.' },
+                { id: 4, name: 'Chicken Crispy', price: 32.00, image: 'https://images.unsplash.com/photo-1606131731446-5568d87113aa?q=80&w=2864&auto=format&fit=crop', description: 'Pão de brioche, frango empanado crocante, alface, tomate e maionese de alho.' },
+                { id: 5, name: 'Salad Burger', price: 28.00, image: 'https://images.unsplash.com/photo-1525059696034-4967a8e1d3b9?q=80&w=2832&auto=format&fit=crop', description: 'Pão integral, burger 160g, alface, tomate, cebola roxa e queijo branco.' },
+                { id: 6, name: 'Burger Vegano', price: 33.00, image: 'https://images.unsplash.com/photo-1549448849-01de9c1f6c42?q=80&w=2940&auto=format&fit=crop', description: 'Pão vegano, burger à base de plantas, queijo vegano, alface e molho especial.' },
+                { id: 7, name: 'Monster Burger', price: 45.00, image: 'https://images.unsplash.com/photo-1605789534438-787c9320b8f0?q=80&w=2899&auto=format&fit=crop', description: 'Duplo pão, 3x burger 160g, triplo queijo, bacon, ovo e salada completa.' },
+                { id: 8, name: 'Classic Cheese', price: 29.00, image: 'https://images.unsplash.com/photo-1598182121131-90a427a143b5?q=80&w=2940&auto=format&fit=crop', description: 'Pão, burger 160g, queijo prato e maionese da casa. O clássico que funciona.' },
+                { id: 9, name: 'Spicy Jalapeño', price: 36.00, image: 'https://images.unsplash.com/photo-1604329760661-e71dc83f8f26?q=80&w=2832&auto=format&fit=crop', description: 'Pão de brioche, burger 180g, queijo apimentado, pimenta jalapeño e molho picante.' },
+                { id: 10, name: 'Onion Rings BBQ', price: 37.00, image: 'https://images.unsplash.com/photo-1604085792782-8d92f276d7d8?q=80&w=2864&auto=format&fit=crop', description: 'Pão australiano, burger 180g, anéis de cebola, queijo e molho barbecue.' },
+            ];
+
+            // --- APPLICATION STATE ---
+            let cart = [];
+            let currentPage = 1;
+
+            // --- DOM ELEMENT SELECTORS ---
+            const menuGrid = document.getElementById('menu-grid');
+            const paginationControls = document.getElementById('pagination-controls');
+            const cartBar = document.getElementById('cart-bar');
+            const cartStatus = document.getElementById('cart-status');
+            const cartModal = document.getElementById('cart-modal');
+            const closeModalBtn = document.getElementById('close-modal-btn');
+            const cartItemsContainer = document.getElementById('cart-items');
+            const cartTotalSpan = document.getElementById('cart-total');
+            const checkoutBtn = document.getElementById('checkout-btn');
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toast-message');
+            const userNameInput = document.getElementById('user-name');
+            const userAddressInput = document.getElementById('user-address');
+
+            // --- FUNCTIONS ---
+
+            /** Formats a number to currency string (Soles) */
+            const formatCurrency = (value) => `S/ ${value.toFixed(2)}`;
+            
+            /** Renders product cards for the current page */
+            function renderMenu() {
+                menuGrid.innerHTML = ''; // Clear existing items
+                const start = (currentPage - 1) * ITEMS_PER_PAGE;
+                const end = start + ITEMS_PER_PAGE;
+                const productsToRender = menuItems.slice(start, end);
+
+                productsToRender.forEach(product => {
+                    const card = document.createElement('div');
+                    card.className = 'bg-white rounded-lg shadow-md overflow-hidden flex flex-col group transition-transform duration-300 hover:scale-105';
+                    card.innerHTML = `
+                        <div class="relative">
+                            <img src="${product.image}" alt="${product.name}" class="w-full h-56 object-cover">
+                             <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                        </div>
+                        <div class="p-4 flex flex-col flex-grow">
+                            <h3 class="text-xl font-bold text-gray-900">${product.name}</h3>
+                            <p class="text-gray-600 text-sm my-2 flex-grow">${product.description}</p>
+                            <div class="flex justify-between items-center mt-4">
+                                <span class="text-2xl font-bold text-green-600">${formatCurrency(product.price)}</span>
+                                <button class="add-to-cart-btn bg-red-600 text-white w-12 h-12 rounded-full hover:bg-red-700 transition-all duration-300 flex items-center justify-center" data-id="${product.id}">
+                                    <i class="fa fa-shopping-cart text-lg"></i>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    menuGrid.appendChild(card);
+                });
+
+                // Re-attach event listeners to the new buttons
+                document.querySelectorAll('.add-to-cart-btn').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const id = parseInt(e.currentTarget.getAttribute('data-id'));
+                        addToCart(id);
+                    });
+                });
+            }
+
+            /** Renders pagination controls */
+            function renderPagination() {
+                paginationControls.innerHTML = '';
+                const totalPages = Math.ceil(menuItems.length / ITEMS_PER_PAGE);
+                if (totalPages <= 1) return;
+
+                const createButton = (text, onClick, disabled = false, active = false) => {
+                    const button = document.createElement('button');
+                    button.innerHTML = text;
+                    button.disabled = disabled;
+                    button.className = `px-4 py-2 rounded-md text-sm font-semibold transition-colors ${
+                        active ? 'bg-red-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                    } ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`;
+                    button.addEventListener('click', onClick);
+                    return button;
+                };
+                
+                const prevButton = createButton('<i class="fa fa-arrow-left"></i>', () => {
+                    if (currentPage > 1) { currentPage--; renderMenu(); renderPagination(); }
+                }, currentPage === 1);
+                paginationControls.appendChild(prevButton);
+
+                for (let i = 1; i <= totalPages; i++) {
+                    const pageButton = createButton(i, () => {
+                         currentPage = i; renderMenu(); renderPagination(); 
+                    }, false, i === currentPage);
+                    paginationControls.appendChild(pageButton);
+                }
+                
+                const nextButton = createButton('<i class="fa fa-arrow-right"></i>', () => {
+                     if (currentPage < totalPages) { currentPage++; renderMenu(); renderPagination(); }
+                }, currentPage === totalPages);
+                paginationControls.appendChild(nextButton);
+            }
+            
+            /** Shows a toast notification */
+            function showToast(message) {
+                toastMessage.textContent = message;
+                toast.classList.remove('hidden');
+                toast.classList.add('flex', 'toast-enter', 'toast-enter-active');
+                
+                setTimeout(() => {
+                    toast.classList.remove('toast-enter-active');
+                    toast.classList.add('toast-exit-active');
+                    setTimeout(() => {
+                         toast.classList.add('hidden');
+                         toast.classList.remove('toast-exit-active', 'toast-enter');
+                    }, 300);
+                }, 2000);
+            }
+            
+            /** Adds an item to the cart or increments its quantity */
+            function addToCart(productId) {
+                const product = menuItems.find(p => p.id === productId);
+                if (!product) return;
+
+                const existingItem = cart.find(item => item.id === productId);
+                if (existingItem) {
+                    existingItem.quantity++;
+                } else {
+                    cart.push({ ...product, quantity: 1 });
+                }
+                
+                showToast('¡Añadido al carrito!');
+                updateCartUI();
+            }
+
+             /** Updates the entire cart UI (bar, modal, totals) */
+            function updateCartUI() {
+                const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+                const totalCost = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+                // Update floating bar
+                if (totalItems > 0) {
+                    cartBar.classList.remove('translate-y-full');
+                    cartStatus.textContent = `(${totalItems}) Ver mi carrito`;
+                } else {
+                    cartBar.classList.add('translate-y-full');
+                }
+
+                // Update modal items
+                cartItemsContainer.innerHTML = '';
+                if (cart.length === 0) {
+                    cartItemsContainer.innerHTML = '<p class="text-gray-500 text-center py-4">Tu carrito está vacío.</p>';
+                    checkoutBtn.disabled = true;
+                } else {
+                    checkoutBtn.disabled = false;
+                    cart.forEach(item => {
+                        const itemElement = document.createElement('div');
+                        itemElement.className = 'flex justify-between items-center py-3 border-b border-gray-100';
+                        itemElement.innerHTML = `
+                            <div class="flex items-center gap-3">
+                                <img src="${item.image}" alt="${item.name}" class="w-16 h-16 object-cover rounded-md">
+                                <div>
+                                    <p class="font-semibold text-md">${item.name}</p>
+                                    <p class="text-sm text-gray-500">${formatCurrency(item.price)}</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <span class="font-semibold">${item.quantity}x</span>
+                                <button class="remove-from-cart-btn text-red-500 hover:text-red-700" data-id="${item.id}">&times;</button>
+                            </div>
+                        `;
+                        cartItemsContainer.appendChild(itemElement);
+                    });
+                }
+
+                // Update total
+                cartTotalSpan.textContent = formatCurrency(totalCost);
+
+                // Re-attach event listeners for remove buttons
+                document.querySelectorAll('.remove-from-cart-btn').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const id = parseInt(e.currentTarget.getAttribute('data-id'));
+                        removeFromCart(id);
+                    });
+                });
+            }
+
+            /** Removes an item from the cart (or decrements quantity) */
+            function removeFromCart(productId) {
+                const itemIndex = cart.findIndex(item => item.id === productId);
+                if (itemIndex > -1) {
+                    cart.splice(itemIndex, 1);
+                    showToast('Item eliminado del carrito.');
+                    updateCartUI();
+                }
+            }
+
+            /** Handles the checkout process */
+            function handleCheckout() {
+                const name = userNameInput.value.trim();
+                const address = userAddressInput.value.trim();
+
+                if (cart.length === 0) return;
+
+                if (!name || !address) {
+                    alert("Por favor, completa tu nombre y dirección para continuar.");
+                    return;
+                }
+
+                const totalCost = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+                let message = `*🍔 ¡Hola, Red Burguer! Quisiera hacer un pedido:*\n\n`;
+                message += `*Cliente:* ${name}\n`;
+                message += `*Dirección de Entrega:* ${address}\n\n`;
+                message += `*📝 Resumen del Pedido:*\n`;
+                cart.forEach(item => {
+                    message += `  - ${item.quantity}x ${item.name}\n`;
+                });
+                message += `\n*💰 Total a Pagar:* ${formatCurrency(totalCost)}`;
+
+                const encodedMessage = encodeURIComponent(message);
+                window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessage}`, '_blank');
+            }
+
+            /** Opens the cart modal */
+            function openCartModal() {
+                updateCartUI();
+                cartModal.classList.remove('hidden');
+                cartModal.classList.add('flex');
+            }
+            
+            /** Closes the cart modal */
+            function closeCartModal() {
+                 cartModal.classList.add('hidden');
+                 cartModal.classList.remove('flex');
+            }
+
+            // --- EVENT LISTENERS INITIALIZATION ---
+            document.addEventListener('DOMContentLoaded', () => {
+                renderMenu();
+                renderPagination();
+                updateCartUI();
+            });
+            cartBar.addEventListener('click', openCartModal);
+            closeModalBtn.addEventListener('click', closeCartModal);
+            checkoutBtn.addEventListener('click', handleCheckout);
+            // Close modal if clicking outside of it
+            cartModal.addEventListener('click', (e) => {
+                if (e.target === cartModal) {
+                    closeCartModal();
+                }
+            });
+
+        })();
+    </script>
+</body>
+</html>
+
+
+<!-- Hola Gemini, buenos dias. Necesito crear una web completa de la imagen en referencia, utilizando TailWind, en el cual las imagenes puedas aparecer 
+  paginadas y se pueda seleccionar los productos en un carrito de compras,
+  para luego realizar la compra de los productos seleccionados y enviar la informacion de los productos comprados hacia un mensaje en el whatsapp -->
+  

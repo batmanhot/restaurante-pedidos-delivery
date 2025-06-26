@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrusel de Imágenes con Tailwind CSS</title>
+    <link href="./output.css" rel="stylesheet">
+    <style>
+        /* Opcional: Para asegurar que las imágenes no desborden y ocupen el espacio completo */
+        .carousel-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Esto asegura que la imagen cubra el área sin distorsionarse */
+        }
+    </style>
+	 <script src="https://cdn.tailwindcss.com"></script>  
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+
+    <div class="relative w-full max-w-2xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
+        <div id="carousel-container" class="flex transition-transform duration-500 ease-in-out">
+            <img src="https://via.placeholder.com/800x400/FF5733/FFFFFF?text=Imagen+1" alt="Imagen 1" class="carousel-image flex-shrink-0">
+            <img src="https://via.placeholder.com/800x400/33FF57/FFFFFF?text=Imagen+2" alt="Imagen 2" class="carousel-image flex-shrink-0">
+            <img src="https://via.placeholder.com/800x400/3357FF/FFFFFF?text=Imagen+3" alt="Imagen 3" class="carousel-image flex-shrink-0">
+            <img src="https://via.placeholder.com/800x400/FF33E9/FFFFFF?text=Imagen+4" alt="Imagen 4" class="carousel-image flex-shrink-0">
+        </div>
+
+        <button id="prev-btn" class="absolute top-1/2 left-4 -translate-y-1/2 bg-gray-800 text-white p-3 rounded-full shadow-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-75">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+            </svg>
+        </button>
+
+        <button id="next-btn" class="absolute top-1/2 right-4 -translate-y-1/2 bg-gray-800 text-white p-3 rounded-full shadow-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-75">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+            </svg>
+        </button>
+    </div>
+
+    <script>
+        const carouselContainer = document.getElementById('carousel-container');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const images = carouselContainer.querySelectorAll('.carousel-image');
+        let currentIndex = 0;
+        const totalImages = images.length;
+
+        function updateCarousel() {
+            const imageWidth = images[0].clientWidth; // Ancho de una imagen
+            carouselContainer.style.transform = `translateX(-${currentIndex * imageWidth}px)`;
+        }
+
+        prevBtn.addEventListener('click', () => {
+            currentIndex = (currentIndex === 0) ? totalImages - 1 : currentIndex - 1;
+            updateCarousel();
+        });
+
+        nextBtn.addEventListener('click', () => {
+            currentIndex = (currentIndex === totalImages - 1) ? 0 : currentIndex + 1;
+            updateCarousel();
+        });
+
+        // Asegurarse de que el carrusel se actualice al cargar la página y al redimensionar
+        window.addEventListener('load', updateCarousel);
+        window.addEventListener('resize', updateCarousel);
+    </script>
+
+</body>
+</html>
