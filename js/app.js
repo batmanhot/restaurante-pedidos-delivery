@@ -364,7 +364,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        let message = `Hola! le gustaria hacer el siguiente pedido:\n\n`;
+        let message = `Hola! quiero hacer este pedido, favor de traerlo a la brevedad:\n\n`;
         message += `*Cliente:* ${userName}\n`;
         message += `*Direccion:* ${userAddress}\n\n`;
         message += `*Referencia:* ${userReferencia}\n\n`;
