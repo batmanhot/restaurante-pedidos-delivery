@@ -1,7 +1,7 @@
     
 document.addEventListener('DOMContentLoaded', () => {    
     // --- CONFIGURACIÓN ---
-    const WHATSAPP_NUMBER = "51999999999"; // ¡IMPORTANTE! Reemplaza con tu número de WhatsApp con código de país.
+    const WHATSAPP_NUMBER = "51951655295"; // ¡IMPORTANTE! Reemplaza con tu número de WhatsApp con código de país.
     const ITEMS_PER_PAGE = 8; // Cuántos productos mostrar por página.
 
     // --- BASE DE DATOS DE PRODUCTOS ---
@@ -367,6 +367,9 @@ document.addEventListener('DOMContentLoaded', () => {
         let message = `Hola! le gustaria hacer el siguiente pedido:\n\n`;
         message += `*Cliente:* ${userName}\n`;
         message += `*Direccion:* ${userAddress}\n\n`;
+        message += `*Referencia:* ${userReferencia}\n\n`;
+        message += `*Celular:* ${userCelular}\n\n`;
+        message += `*Forma de Pago:* ${userPago}\n\n`;
         message += `*Items del Pedido:*\n`;
 
         cart.forEach(item => {
