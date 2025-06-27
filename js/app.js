@@ -465,11 +465,21 @@ document.addEventListener('DOMContentLoaded', () => {
         
         window.open(whatsappUrl, '_blank');
 
-        //cartModal.classList.add('hidden')
-        cartModal.classList.remove('hidden')
-        //vaciarCart();
-        //cart = [];      // Vaciar el carrito después de enviar el pedido
-        //updateCart(); // Actualizar la UI del carrito
+        
+        // Mostrar mensaje de éxito y Cerrar el modal del carrito
+        // ------------------------------------------------------
+        showToast('Pedido enviado a WhatsApp!');
+        cartModal.classList.add('hidden')
+        cart = []
+
+        document.getElementById('user-name').value = '';
+        document.getElementById('user-address').value = '';
+        document.getElementById('user-celular').value = '';
+        document.getElementById('user-pago').value = '';
+        document.getElementById('user-referencia').value = '';
+        updateCart();   // Actualizar la UI del carrito
+        
+        // ------------------------------------------------------
     }
 
     // --- EVENT LISTENERS ---
