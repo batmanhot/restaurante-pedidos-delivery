@@ -353,7 +353,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             <i class="fa-solid fa-minus"></i>
                         </button>
 
-                        <input type="number" min="1" value="${item.quantity}" class="quantity-input w-10 text-right border border-gray-300 rounded-md mx-2 text-sm font-bold" data-id="${item.id}">
+                        <input type="number" min="1" max="10" value="${item.quantity}" class="quantity-input w-10 text-right border border-gray-300 rounded-md mx-2 text-sm font-bold" data-id="${item.id}">
 
                         <button class="increment-quantity-btn bg-blue-600 text-white px-2 py-1 rounded-md hover:bg-blue-700 mr-2 w-8" data-id="${item.id}">
                             <i class="fa-solid fa-plus"></i>
@@ -393,8 +393,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         item.quantity--;
                     } else {
                         showToast('Alcanzo la cantidad minima');
-                        return; // No permitir decrementar a menos de 1
-                        //cart = cart.filter(item => item.id !== id);
+                        return; // No permitir decrementar a menos de 1                        
                     }
                     showToast('Cantidad actualizada');
                     updateCart();
@@ -406,14 +405,21 @@ document.addEventListener('DOMContentLoaded', () => {
         // Añadir event listeners a los botones de incrementar cantidad quantity-input
         document.querySelectorAll('.increment-quantity-btn').forEach(button => {    
             button.addEventListener('click', () => {
-                 const id = parseInt(button.getAttribute('data-id'));
-                 const item = cart.find(item => item.id === id);
-                   if (item) {
-                       item.quantity++;                       
-                       showToast('Cantidad actualizada');
-                       updateCart();
-                       console.log('Incrementar cantidad del producto', item.name);
+                const id = parseInt(button.getAttribute('data-id'));
+                const item = cart.find(item => item.id === id);                   
+
+                if (item) {
+                    if (item.quantity < 10) {
+                        item.quantity++;
+                    } else {
+                        showToast('Alcanzo la cantidad maxima');
+                        return;
                     }
+                    //item.quantity++;                       
+                    showToast('Cantidad actualizada');
+                    updateCart();
+                    console.log('Incrementar cantidad del producto', item.name);
+                }
             });
         });
 
