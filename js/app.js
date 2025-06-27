@@ -246,9 +246,7 @@ document.addEventListener('DOMContentLoaded', () => {
                   const id = parseInt(button.getAttribute('data-id'));                                    
                   viewProduct(id);                
               });
-         });
-        
-              
+         });  
     }        
 
     /** Renderiza los controles de paginación */
@@ -321,7 +319,16 @@ document.addEventListener('DOMContentLoaded', () => {
                         </div>
                     </div>
                     <div class="flex items-center">
-                        <p class="mx-2 font-bold">${item.quantity}x</p>
+
+                        <button class="decrement-quantity-btn bg-blue-600 text-white px-2 py-1 rounded-md hover:bg-blue-700 mr-2 w-8" data-id="${item.id}">                            
+                            <i class="fa-solid fa-minus"></i>
+                        </button>
+
+                        <input  type="number" min="1" value="${item.quantity}" class="quantity-input w-10 text-center border border-gray-300 rounded-md gap-2 mr-2" data-id="${item.id}">                        
+
+                        <button class="increment-quantity-btn bg-blue-600 text-white px-2 py-1 rounded-md hover:bg-blue-700 mr-2 w-8" data-id="${item.id}">
+                            <i class="fa-solid fa-plus"></i>
+                        </button>                        
                         <button class="remove-item-btn bg-red-600 text-white px-2 py-1 rounded-md hover:bg-red-700" data-id="${item.id}">
                         <i class="fa fa-trash"></i>
                     </div>
@@ -329,6 +336,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 cartItemsContainer.appendChild(itemElement);
             });
         }
+
+        //   <p class="mx-2 font-bold">${item.quantity}x</p>       
 
         // Actualizar total
         const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
@@ -343,8 +352,57 @@ document.addEventListener('DOMContentLoaded', () => {
                 updateCart();
             });
         });
-    }
 
+
+        // Añadir event listeners a los botones de decrementar cantidad
+        document.querySelectorAll('.decrement-quantity-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                const id = parseInt(button.getAttribute('data-id'));
+                const item = cart.find(item => item.id === id);
+                if (item) {
+                    if (item.quantity > 1) {
+                        item.quantity--;
+                    } else {
+                        showToast('Alcanzo la cantidad minima');
+                        return; // No permitir decrementar a menos de 1
+                        //cart = cart.filter(item => item.id !== id);
+                    }
+                    showToast('Cantidad actualizada');
+                    updateCart();
+                    console.log("Decrementar cantidad del producto!", item.name);
+                }
+            });
+        });
+
+        // Añadir event listeners a los botones de incrementar cantidad quantity-input
+        document.querySelectorAll('.increment-quantity-btn').forEach(button => {    
+            button.addEventListener('click', () => {
+                 const id = parseInt(button.getAttribute('data-id'));
+                 const item = cart.find(item => item.id === id);
+                   if (item) {
+                       item.quantity++;                       
+                       showToast('Cantidad actualizada');
+                       updateCart();
+                       console.log('Incrementar cantidad del producto', item.name);
+                    }
+            });
+        });
+
+        document.querySelectorAll('.quantity-input').forEach(button => {    
+            button.addEventListener('click', () => {
+                 const id = parseInt(button.getAttribute('data-id'));
+                 const item = cart.find(item => item.id === id);
+                   if (item) {
+                       item.quantity = parseInt(button.value);
+                       showToast('Cantidad actualizada');
+                       updateCart();
+                       console.log('Actualiza cantidad del producto', item.name);
+                    }
+            });
+        });
+
+
+    }
 
     function vaciarView() {
      // forma lenta
@@ -353,6 +411,17 @@ document.addEventListener('DOMContentLoaded', () => {
      // forma rapida (recomendada)
      while(viewModalContent.firstChild) {
           viewModalContent.removeChild(viewModalContent.firstChild);
+      }
+    }
+
+    function vaciarCart() {
+     // forma lenta
+     // contenedorCarrito.innerHTML = '';
+     
+     // forma rapida (recomendada)
+     
+     while(cartModal.firstChild) {
+          cartModal.removeChild(cartModal.firstChild);
       }
     }
 
@@ -395,6 +464,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessage}`;
         
         window.open(whatsappUrl, '_blank');
+
+        //cartModal.classList.add('hidden')
+        cartModal.classList.remove('hidden')
+        //vaciarCart();
+        //cart = [];      // Vaciar el carrito después de enviar el pedido
+        //updateCart(); // Actualizar la UI del carrito
     }
 
     // --- EVENT LISTENERS ---
