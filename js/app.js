@@ -127,6 +127,13 @@ document.addEventListener('DOMContentLoaded', () => {
             // document.querySelector(".caption-email").textContent = infEmail;
     }
 
+    function showSpinner() {
+       document.getElementById('overlay').style.display = 'flex';
+    }
+
+    function hideSpinner() {
+        document.getElementById('overlay').style.display = 'none';
+    }
 
     /** Muestra una notificación temporal (toast) */
     function showToast(message) {
@@ -136,13 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
             toast.classList.add('hidden');
         }, 2000); // El toast desaparece después de 2 segundos
     }
-
-    function showSpinner() {
-        loadingSpinner.classList.remove('hidden');
-        setTimeout(() => {
-            loadingSpinner.classList.add('hidden');
-        }, 2000); // El loadingSpinner desaparece después de 2 segundos
-    }
+  
 
     
     /** Añade un producto al carrito */
@@ -523,6 +524,12 @@ document.addEventListener('DOMContentLoaded', () => {
     checkoutBtn.addEventListener('click', sendToWhatsApp);
         
     // --- INICIALIZACIÓN ---
+    showSpinner();
+
+    setTimeout(() => {
+         hideSpinner();     
+     }, 1500);
+
     renderProducts();
     renderPagination();
     updateCart();

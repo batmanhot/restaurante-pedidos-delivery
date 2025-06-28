@@ -32,12 +32,44 @@
         #cart-items::-webkit-scrollbar-thumb:hover {
             background: #555;
         }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            backdrop-filter: blur(10px); /* desenfoque */
+            background-color: rgba(255, 255, 255, 0.1); /* transparencia sutil */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+          }
+
+        .spinner {
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid #3498db;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+            margin: auto;
+          }
+
+         @keyframes spin {
+            0%   { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+         }
     </style>    
 
-
 </head>
-<body class="bg-gray-200 font-sans"> 
 
+
+<body class="bg-gray-200 font-sans"> 
+   
 <!-- <body class="bg-[#eba355] font-sans"> -->
 <!-- <body class="relative h-96 md:h-[500px] bg-cover bg-center" style="background-image: url('./images/vista-superior-tablas-hamburguesas-aros-cebolla_23-2147684650.avif');"> -->
    
@@ -54,6 +86,11 @@
             </div>
         </div>
     </header>
+
+
+    <div id="overlay" class="overlay" style="display: none;">
+        <div class="spinner"></div> 
+    </div>
 
     <main class="container mx-auto px-4 py-12">
         <h2 class="text-3xl font-bold text-center text-gray-800 mb-10">Conozca nuestra carta</h2>
