@@ -396,7 +396,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         showToast('Alcanzo la cantidad minima');
                         return; // No permitir decrementar a menos de 1                        
                     }
-                    showToast('Cantidad actualizada');
+                    // showToast('Cantidad actualizada');
                     updateCart();
                     console.log("Decrementar cantidad del producto!", item.name);
                 }
@@ -417,7 +417,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         return;
                     }
                     //item.quantity++;                       
-                    showToast('Cantidad actualizada');
+                    // showToast('Cantidad actualizada');
                     updateCart();
                     console.log('Incrementar cantidad del producto', item.name);
                 }
